@@ -2,10 +2,9 @@
 
 var Hash = require('../../../libs/Hash');
 
-var User = function(id, nickname) {
-    this.id = id;
+var User = function(nickname) {
+    this.id = Hash(id);
     this.nickname = nickname;
-    this.isActive = false;
 };
 
 User.prototype.nickname = function(nickname) {
@@ -15,15 +14,8 @@ User.prototype.nickname = function(nickname) {
     return this.nickname = nickname;
 };
 
-User.prototype.active = function(isActive) {
-    if (typeof isActive !== 'boolean') {
-        return this.isActive;
-    }
-    return this.isActive = isActive;
-};
-
-User.hash = function(nickname) {
-    return Hash(nickname);
+User.prototype.json = function() {
+    return {id: this.id, nickname: this.nickname};
 };
 
 module.exports = User;

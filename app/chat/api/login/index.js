@@ -1,15 +1,18 @@
 'use strict';
 
-var userPool = require('../../user/Userpool');
+var chatroom = require('../../chatroom/Chatroom');
+var User = require('../../user/User');
 
-var LOGIN_SUCCESS = 0;
 var LOGIN_FAILED_NAME_DUPLICATED = 1;
 
-var Handler = function(req, res, next) {
-    var loggedin = userPool.hasUserLoggedin(req.body.nickname);
-    return res.json({
-        code: loggedin ? LOGIN_FAILED_NAME_DUPLICATED : LOGIN_SUCCESS
-    });
+var Handler = function(app, server) {
+    return function(req, res, next) {
+        var user = new User(req.body.nickname);
+        var loggedin = chatroom.containsUser(user);
+        return res.json({
+            code: loggedin ? LOGIN_FAILED_NAME_DUPLICATED : 0
+        });
+    };
 };
 
 module.exports = {
