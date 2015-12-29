@@ -2,6 +2,7 @@
 
 var Chatroom = function() {
     this.size = 0;
+    this.groups = [];
 };
 
 Chatroom.prototype.size = function() {
