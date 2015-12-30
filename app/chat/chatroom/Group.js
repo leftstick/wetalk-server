@@ -1,24 +1,45 @@
 'use strict';
 
 var Hash = require('../../../libs/Hash');
+var loggedInUsers = require('../user/LoggedInUsers');
 var UserConnection = require('../user/UserConnection');
+var EventEmitter = require('events').EventEmitter;
 
 var Group = function(name, icon, io) {
     this.id = Hash(name);
     this.name = name;
     this.icon = icon;
     this.io = io;
+
+    this.groupChat = null;
     this.userConnection = [];
+
+    this.event = new EventEmitter();
 };
 
 Group.prototype.start = function() {
-    var _this = this;
-    this.io
+    this.groupChat = this.io
         .of('/' + this.id)
-        .on('connection', function(socket) {
-            var conn = new UserConnection(socket).start();
-            _this.userConnection = [..._this.userConnection, conn];
-        });
+        .on('connection', this.receiveClient.bind(this));
+
+    this.event.on('user-offline', this.kickUser.bind(this));
+    this.event.on('send-message', this.broadcast.bind(this));
+};
+
+Group.prototype.receiveClient = function(socket) {
+    this.userConnection = [
+        ...this.userConnection,
+        new UserConnection(socket, this.event).start()
+    ];
+};
+
+Group.prototype.broadcast = function(message) {
+    this.groupChat.emit('message', message);
+};
+
+Group.prototype.kickUser = function(userConnection) {
+    this.userConnection = this.userConnection.filter(conn => conn !== userConnection);
+    loggedInUsers.remove(userConnection.user);
 };
 
 Group.prototype.contains = function(user) {

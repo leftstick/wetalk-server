@@ -1,28 +1,37 @@
 'use strict';
 
-var Hash = require('../../../libs/Hash');
+var loggedInUsers = require('./LoggedInUsers');
 
-var UserConnection = function(socket) {
-    this.socket = socket;
-    this.id = null;
-    this.nickname = null;
-};
+class UserConnection {
+    constructor(socket, event) {
+        this.socket = socket;
+        this.event = event;
+        this.user = null;
+    }
 
-UserConnection.prototype.start = function() {
-    this.socket
-        .on('init', function(from, msg) {
-            console.log(from, msg);
-        });
-    return this;
-};
+    initialize(id) {
+        this.user = loggedInUsers.get(id);
+    }
 
-UserConnection.prototype.set = function(nickname) {
-    this.id = Hash(nickname);
-    this.nickname = nickname;
-};
+    start() {
+        this.socket
+            .on('init', this.initialize.bind(this))
+            .on('message', this.message.bind(this))
+            .on('disconnect', this.destroy.bind(this));
+        return this;
+    }
 
-UserConnection.prototype.json = function() {
-    return {id: this.id, nickname: this.nickname};
-};
+    message(message) {
+        this.event.emit('send-message', message);
+    }
+
+    destroy() {
+        this.event.emit('user-offline', this);
+    }
+
+    json() {
+        return this.user && this.user.json();
+    }
+}
 
 module.exports = UserConnection;

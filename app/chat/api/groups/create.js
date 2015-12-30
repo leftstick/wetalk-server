@@ -13,6 +13,7 @@ var Handler = function(app, server, io) {
         }
 
         chatroom.add(g);
+        g.start();
         return res.json({code: 0, data: g.json()});
     };
 };
