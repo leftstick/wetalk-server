@@ -3,9 +3,10 @@
 var Hash = require('../../../libs/Hash');
 var UserConnection = require('../user/UserConnection');
 
-var Group = function(name, io) {
+var Group = function(name, icon, io) {
     this.id = Hash(name);
     this.name = name;
+    this.icon = icon;
     this.io = io;
     this.userConnection = [];
 };
@@ -32,6 +33,7 @@ Group.prototype.json = function() {
     return {
         id: this.id,
         name: this.name,
+        icon: this.icon,
         users: this.userConnection.map(conn => conn.json())
     };
 };

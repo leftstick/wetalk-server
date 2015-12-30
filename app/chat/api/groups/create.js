@@ -7,7 +7,7 @@ var GROUP_EXIST = 2;
 
 var Handler = function(app, server, io) {
     return function(req, res, next) {
-        var g = new Group(req.body.name, io);
+        var g = new Group(req.body.name, req.body.icon, io);
         if (chatroom.contains(g)) {
             return res.json({code: GROUP_EXIST});
         }
@@ -18,7 +18,7 @@ var Handler = function(app, server, io) {
 };
 
 module.exports = {
-    when: '/groups',
+    when: '/group',
     verb: 'post',
     handler: Handler
 };

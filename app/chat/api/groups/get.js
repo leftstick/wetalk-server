@@ -4,7 +4,16 @@ var chatroom = require('../../chatroom/Chatroom');
 
 var Handler = function(app, server) {
     return function(req, res, next) {
-        return res.json({code: 0, data: chatroom.json()});
+        return res.json({
+            code: 0,
+            data: chatroom.json().map(function(group) {
+                return {
+                    id: group.id,
+                    name: group.name,
+                    icon: group.icon
+                };
+            })
+        });
     };
 };
 

@@ -3,7 +3,7 @@
 var Hash = require('../../../libs/Hash');
 
 var User = function(nickname) {
-    this.id = Hash(id);
+    this.id = Hash(nickname);
     this.nickname = nickname;
 };
 
