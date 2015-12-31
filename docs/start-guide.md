@@ -15,5 +15,6 @@ npm install
 Type below command in ternimal:
 
 ```bash
+#server will be launched, and listening port 3000
 npm start
 ```
