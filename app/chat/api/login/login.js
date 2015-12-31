@@ -1,7 +1,6 @@
 'use strict';
 
 var loggedInUsers = require('../../user/LoggedInUsers');
-var chatroom = require('../../chatroom/Chatroom');
 var User = require('../../user/User');
 
 var LOGIN_FAILED_NAME_DUPLICATED = 1;

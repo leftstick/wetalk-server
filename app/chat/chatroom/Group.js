@@ -1,7 +1,6 @@
 'use strict';
 
 var Hash = require('../../../libs/Hash');
-var loggedInUsers = require('../user/LoggedInUsers');
 var UserConnection = require('../user/UserConnection');
 var EventEmitter = require('events').EventEmitter;
 
@@ -39,7 +38,6 @@ Group.prototype.broadcast = function(message) {
 
 Group.prototype.kickUser = function(userConnection) {
     this.userConnection = this.userConnection.filter(conn => conn !== userConnection);
-    loggedInUsers.remove(userConnection.user);
 };
 
 Group.prototype.contains = function(user) {

@@ -16,6 +16,9 @@ LoggedInUsers.prototype.get = function(id) {
 };
 
 LoggedInUsers.prototype.remove = function(user) {
+    if (!user) {
+        return;
+    }
     this.users = this.users.filter(u => u.id !== user.id);
 };
 
