@@ -1,7 +1,7 @@
 'use strict';
 
-var chatroom = require('../../chatroom/Chatroom');
-var Group = require('../../chatroom/Group');
+var chatroom = require('../../chat/Chatroom');
+var Group = require('../../model/Group');
 
 var GROUP_EXIST = 2;
 

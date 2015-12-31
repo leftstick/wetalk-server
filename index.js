@@ -5,10 +5,12 @@ var server = require('http').createServer(app);
 
 var prerequest = require('./app/prerequest');
 var chat = require('./app/chat');
+var api = require('./app/api');
 
 prerequest(app, server);
 
-chat(app, server);
+var io = chat(app, server);
+api(app, server, io);
 
 server.listen(3000, '0.0.0.0', function() {
     var host = server.address().address;

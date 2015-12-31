@@ -1,11 +1,11 @@
 'use strict';
 
-var loggedInUsers = require('../../user/LoggedInUsers');
+var UserPool = require('../../chat/UserPool');
 
 var Handler = function(app, server) {
     return function(req, res, next) {
-        var user = loggedInUsers.get(Number(req.params.id));
-        loggedInUsers.remove(user);
+        var user = UserPool.get(Number(req.params.id));
+        UserPool.remove(user);
         return res.json({code: 0});
     };
 };

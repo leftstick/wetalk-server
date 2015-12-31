@@ -1,7 +1,7 @@
 'use strict';
 
-var loggedInUsers = require('../../user/LoggedInUsers');
-var User = require('../../user/User');
+var UserPool = require('../../chat/UserPool');
+var User = require('../../model/User');
 
 var LOGIN_FAILED_NAME_DUPLICATED = 1;
 
@@ -9,7 +9,7 @@ var Handler = function(app, server) {
     return function(req, res, next) {
         var user = new User(req.body.nickname);
         try {
-            loggedInUsers.add(user);
+            UserPool.add(user);
             return res.json({code: 0, data: user.json()});
         } catch (e) {
             return res.json({

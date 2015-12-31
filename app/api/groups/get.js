@@ -1,6 +1,6 @@
 'use strict';
 
-var chatroom = require('../../chatroom/Chatroom');
+var chatroom = require('../../chat/Chatroom');
 
 var Handler = function(app, server) {
     return function(req, res, next) {

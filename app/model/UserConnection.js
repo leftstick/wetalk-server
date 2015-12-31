@@ -1,6 +1,6 @@
 'use strict';
 
-var loggedInUsers = require('./LoggedInUsers');
+var UserPool = require('../chat/UserPool');
 
 class UserConnection {
     constructor(socket, event) {
@@ -10,7 +10,7 @@ class UserConnection {
     }
 
     initialize(id) {
-        this.user = loggedInUsers.get(id);
+        this.user = UserPool.get(id);
     }
 
     start() {
