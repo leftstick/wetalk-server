@@ -11,7 +11,7 @@ var Handler = function(app, server) {
 };
 
 module.exports = {
-    when: '/logout',
+    when: '/logout/:id',
     verb: 'post',
     handler: Handler
 };
