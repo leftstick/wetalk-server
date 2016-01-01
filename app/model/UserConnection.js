@@ -11,6 +11,7 @@ class UserConnection {
 
     initialize(id) {
         this.user = UserPool.get(id);
+        this.event.emit('user-added');
     }
 
     start() {

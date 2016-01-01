@@ -5,11 +5,12 @@ var UserConnection = require('./UserConnection');
 var EventEmitter = require('events').EventEmitter;
 
 class Group {
-    constructor(name, icon, io) {
+    constructor(name, icon, io, owner) {
         this.id = Hash(name);
         this.name = name;
         this.icon = icon;
         this.io = io;
+        this.owner = owner;
 
         this.groupChat = null;
         this.userConnection = [];
@@ -24,6 +25,7 @@ class Group {
 
         this.event.on('user-offline', this._kickUser.bind(this));
         this.event.on('send-message', this._broadcast.bind(this));
+        this.event.on('user-added', this._userAdded.bind(this));
     }
 
     _receiveClient(socket) {
@@ -41,6 +43,10 @@ class Group {
         this.userConnection = this.userConnection.filter(conn => conn !== userConnection);
     }
 
+    _userAdded() {
+        this.groupChat.emit('group-user-updated', this.userConnection.filter(conn => !!conn).map(conn => conn.json()));
+    }
+
     contains(user) {
         return !!this.userConnection.find(u => u.id === user.id);
     }
@@ -50,7 +56,7 @@ class Group {
             id: this.id,
             name: this.name,
             icon: this.icon,
-            users: this.userConnection.map(conn => conn.json())
+            users: this.userConnection.filter(conn => !!conn).map(conn => conn.json())
         };
     }
 }
