@@ -2,10 +2,9 @@
 
 var Hash = require('../libs/Hash');
 var UserConnection = require('./UserConnection');
-var EventEmitter = require('events').EventEmitter;
 
 class Group {
-    constructor(name, icon, io, owner) {
+    constructor(name, icon, io, owner, event) {
         this.id = Hash(name);
         this.name = name;
         this.icon = icon;
@@ -15,7 +14,7 @@ class Group {
         this.groupChat = null;
         this.userConnection = [];
 
-        this.event = new EventEmitter();
+        this.event = event;
     }
 
     start() {
@@ -42,11 +41,14 @@ class Group {
     _kickUser(userConnection) {
         this.userConnection = this.userConnection.filter(conn => conn !== userConnection);
         this.groupChat.emit('group-user-removed', userConnection.json());
+
+        this.event.emit('group-user-removed', this);
     }
 
     _userAdded(user) {
         this.groupChat.emit('group-user-added', user);
-        this.groupChat.emit('retrieve-users', this.json().users);
+
+        this.event.emit('group-user-added', this);
     }
 
     contains(user) {
