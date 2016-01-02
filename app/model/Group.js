@@ -46,7 +46,7 @@ class Group {
 
     _userAdded(user) {
         this.groupChat.emit('group-user-added', user);
-        this.groupChat.emit('retrieve-users', this.userConnection.filter(conn => !!conn.user).map(conn => conn.json()));
+        this.groupChat.emit('retrieve-users', this.json().users);
     }
 
     contains(user) {
