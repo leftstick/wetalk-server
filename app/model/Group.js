@@ -41,10 +41,11 @@ class Group {
 
     _kickUser(userConnection) {
         this.userConnection = this.userConnection.filter(conn => conn !== userConnection);
+        this.groupChat.emit('group-user-removed', userConnection.json());
     }
 
-    _userAdded() {
-        this.groupChat.emit('group-user-updated', this.userConnection.filter(conn => !!conn).map(conn => conn.json()));
+    _userAdded(user) {
+        this.groupChat.emit('group-user-added', user);
     }
 
     contains(user) {
