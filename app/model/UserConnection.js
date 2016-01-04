@@ -11,7 +11,7 @@ class UserConnection {
 
     initialize(id) {
         this.user = UserPool.get(id);
-        this.event.emit('user-added', this.user);
+        this.event.emit('user-added', this.socket, this.user);
     }
 
     start() {
@@ -23,11 +23,11 @@ class UserConnection {
     }
 
     message(message) {
-        this.event.emit('send-message', message);
+        this.event.emit('send-message', this.socket, message);
     }
 
     destroy() {
-        this.event.emit('user-offline', this);
+        this.event.emit('user-offline', this.socket, this);
     }
 
     json() {
