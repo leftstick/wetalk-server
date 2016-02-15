@@ -2,19 +2,19 @@
 
 var UserPool = require('../chat/UserPool');
 
-class UserConnection {
-    constructor(socket, event) {
+class UserConnection{
+    constructor(socket, event){
         this.socket = socket;
         this.event = event;
         this.user = null;
     }
 
-    initialize(id) {
+    initialize(id){
         this.user = UserPool.get(id);
         this.event.emit('user-added', this.socket, this.user);
     }
 
-    start() {
+    start(){
         this.socket
             .on('init', this.initialize.bind(this))
             .on('message', this.message.bind(this))
@@ -22,15 +22,15 @@ class UserConnection {
         return this;
     }
 
-    message(message) {
+    message(message){
         this.event.emit('send-message', this.socket, message);
     }
 
-    destroy() {
+    destroy(){
         this.event.emit('user-offline', this.socket, this);
     }
 
-    json() {
+    json(){
         return this.user && this.user.json();
     }
 }

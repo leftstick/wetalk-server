@@ -2,7 +2,7 @@
 
 var app = require('express')();
 var server = require('http').createServer(app);
-var Socket = require('socket.io');
+var socket = require('socket.io');
 
 var Chatroom = require('./app/chat/Chatroom');
 
@@ -11,9 +11,9 @@ var api = require('./app/api');
 
 beforeLogic(app, server);
 
-api(app, server, new Chatroom(Socket(server)));
+api(app, server, new Chatroom(socket(server)));
 
-server.listen(3000, '0.0.0.0', function() {
+server.listen(3000, '0.0.0.0', function(){
     var host = server.address().address;
     var port = server.address().port;
     console.log(`wetalk is listening at http://${host}:${port}`);

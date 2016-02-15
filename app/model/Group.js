@@ -1,12 +1,12 @@
 'use strict';
 
-var Hash = require('../libs/Hash');
+var hash = require('../libs/Hash');
 var UserConnection = require('./UserConnection');
 var EventEmitter = require('events').EventEmitter;
 
-class Group {
-    constructor(name, icon, io, owner, globalEvent) {
-        this.id = Hash(name);
+class Group{
+    constructor(name, icon, io, owner, globalEvent){
+        this.id = hash(name);
         this.name = name;
         this.icon = icon;
         this.io = io;
@@ -19,7 +19,7 @@ class Group {
         this.event = new EventEmitter();
     }
 
-    start() {
+    start(){
         this.io
             .of('/' + this.name)
             .on('connection', this._receiveClient.bind(this));
@@ -31,35 +31,35 @@ class Group {
         this.event.on('user-added', this._userAdded.bind(this));
     }
 
-    _receiveClient(socket) {
+    _receiveClient(socket){
         this.userConnection = [
             ...this.userConnection,
             new UserConnection(socket, this.event).start()
         ];
     }
 
-    _broadcast(socket, message) {
+    _broadcast(socket, message){
         socket.broadcast.emit('message', message);
     }
 
-    _kickUser(socket, userConnection) {
+    _kickUser(socket, userConnection){
         this.userConnection = this.userConnection.filter(conn => conn !== userConnection);
         socket.broadcast.emit('group-user-removed', userConnection.json());
 
         this.globalEvent.emit('group-user-removed', this);
     }
 
-    _userAdded(socket, user) {
+    _userAdded(socket, user){
         socket.broadcast.emit('group-user-added', user);
 
         this.globalEvent.emit('group-user-added', this);
     }
 
-    contains(user) {
+    contains(user){
         return !!this.userConnection.find(u => u.id === user.id);
     }
 
-    json() {
+    json(){
         return {
             id: this.id,
             name: this.name,

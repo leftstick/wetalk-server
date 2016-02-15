@@ -2,8 +2,8 @@
 
 var EventEmitter = require('events').EventEmitter;
 
-class Chatroom {
-    constructor(io) {
+class Chatroom{
+    constructor(io){
         this.groups = [];
         this.io = io;
 
@@ -14,7 +14,7 @@ class Chatroom {
         this._start();
     }
 
-    _start() {
+    _start(){
         this.chatroom = this.io
             .of('/chatroom');
 
@@ -22,12 +22,12 @@ class Chatroom {
         this.event.on('group-user-removed', this._groupUserUpdated.bind(this));
     }
 
-    _groupUserUpdated(group) {
+    _groupUserUpdated(group){
         this.chatroom.emit('group-user-updated', group.json());
     }
 
-    add(group) {
-        if (typeof group !== 'object') {
+    add(group){
+        if (typeof group !== 'object'){
             return;
         }
         this.groups = [...this.groups, group];
@@ -35,22 +35,22 @@ class Chatroom {
         return group;
     }
 
-    remove(group) {
-        if (typeof group !== 'object') {
+    remove(group){
+        if (typeof group !== 'object'){
             return;
         }
         this.groups = this.groups.filter(g => g.id !== group.id);
         this.chatroom.emit('group-removed', group.json());
     }
 
-    contains(group) {
-        if (typeof group !== 'object') {
+    contains(group){
+        if (typeof group !== 'object'){
             return;
         }
         return !!this.groups.find(g => g.id === group.id);
     }
 
-    json() {
+    json(){
         return this.groups;
     }
 }
